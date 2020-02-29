@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     Button addOneBtn;
     Button substractOneBtn;
     Button submitOrderBtn;
+//    TODO: - Add sendEmailBtn
 
     private int quantity = 0;
 
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         addOneBtn = findViewById(R.id.plusBtn);
         substractOneBtn = findViewById(R.id.minusBtn);
         submitOrderBtn = findViewById(R.id.submitBtn);
+//        TODO: - Setup for sendEmailBtn
     }
 
     private void addListeners() {
@@ -68,19 +70,12 @@ public class MainActivity extends AppCompatActivity {
                 displayPrice(quantity * 5);
                 Log.d(TAG, "onClick: Quantity is: " + quantity);
 
-                String email = "enachescurobert@gmail.com";
-
-                Intent emailIntent = new Intent(
-                        Intent.ACTION_SENDTO,
-                        Uri.parse("mailto:" + email));
-
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Comanda mea");
-                emailIntent.putExtra(Intent.EXTRA_TEXT,
-                        "Doresc sa comand " + quantity + " cafele." +
-                        "\nTotal de plata: " + priceTextView.getText());
-                startActivity(Intent.createChooser(emailIntent, "Alege ce vrei sa folosesti"));
+//                TODO: - call sendEmail() in the listener of the sendEmailBtn
+                sendEmail();
             }
         });
+
+//        TODO: - Add listener to the sendEmailBtn
     }
 
     private void display(int number) {
@@ -89,6 +84,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayPrice(int number){
         priceTextView.setText(NumberFormat.getCurrencyInstance(new Locale("ro_RO", "RO")).format(number));
+    }
+
+    private void sendEmail() {
+
+        String email = "enachescurobert@gmail.com";
+
+        Intent emailIntent = new Intent(
+                Intent.ACTION_SENDTO,
+                Uri.parse("mailto:" + email));
+
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Comanda mea");
+        emailIntent.putExtra(Intent.EXTRA_TEXT,
+                "Doresc sa comand " + quantity + " cafele." +
+                        "\nTotal de plata: " + priceTextView.getText());
+        startActivity(Intent.createChooser(emailIntent, "Alege ce vrei sa folosesti"));
     }
 
 }
