@@ -12,6 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.view.View;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -19,10 +24,16 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
 //    Properties
-    TextView quantityTextView;
+    TextView pizzaCasTv;
+    Button plusPizzaCasBtn;
+    Button minusPizzaCasBtn;
+    TextView pizzaMexTv;
+    Button plusPizzaMexBtn;
+    Button minusPizzaMexBtn;
+    TextView pizzaCapTv;
+    Button plusPizzaCapBtn;
+    Button minusPizzaCapBtn;
     TextView priceTextView;
-    Button addOneBtn;
-    Button substractOneBtn;
     Button submitOrderBtn;
     Button sendOrderBtn;
 
@@ -33,7 +44,10 @@ public class MainActivity extends AppCompatActivity {
     * -> nu vom avea un singur tip de pizza, ci mai multe !!!!!!!
     * */
 
-    private int quantity = 0;
+    private int pizzaCasQuantity = 0;
+    private int pizzaMexQuantity = 0;
+    private int pizzaCapQuantity = 0;
+    private int totalPrice = 0;
 
     private static final String TAG = "MainActivity";
 
@@ -49,30 +63,36 @@ public class MainActivity extends AppCompatActivity {
 
 //    Custom methods
     private void setup() {
-        quantityTextView = findViewById(R.id.quantity_text_view);
+
+        pizzaCasTv = findViewById(R.id.pizzaCasTv);
+        plusPizzaCasBtn = findViewById(R.id.plusPizzaCasBtn);
+        minusPizzaCasBtn = findViewById(R.id.minusPizzaCasBtn);
+
+
+
         priceTextView = findViewById(R.id.price_value);
-        addOneBtn = findViewById(R.id.plusBtn);
-        substractOneBtn = findViewById(R.id.minusBtn);
         submitOrderBtn = findViewById(R.id.submitBtn);
         sendOrderBtn= findViewById(R.id.sendEmailBtn);
 //        TODO: - Setup for sendEmailBtn
     }
 
     private void addListeners() {
-        addOneBtn.setOnClickListener(new View.OnClickListener() {
+        plusPizzaCasBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                display(++quantity);
-                //sendOrderBtn.setEnabled(false);
+                pizzaCasQuantity++;
+                pizzaCasTv.setText(String.valueOf(pizzaCasQuantity));
+                sendOrderBtn.setEnabled(false);
             }
         });
 
-        substractOneBtn.setOnClickListener(new View.OnClickListener() {
+        minusPizzaCasBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (quantity > 0) {
-                    display(--quantity);
-                    //sendOrderBtn.setEnabled(false);
+                if (pizzaCasQuantity > 0) {
+                    pizzaCasQuantity--;
+                    pizzaCasTv.setText(String.valueOf(pizzaCasQuantity));
+                    sendOrderBtn.setEnabled(false);
                 }
             }
         });
@@ -80,25 +100,23 @@ public class MainActivity extends AppCompatActivity {
         submitOrderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayPrice(quantity * 5);
-                Log.d(TAG, "onClick: Quantity is: " + quantity);
-                sendOrderBtn.setVisibility(View.VISIBLE);
-                //sendOrderBtn.setEnabled(true);
+                totalPrice = pizzaCasQuantity * 25 + pizzaCapQuantity * 30 + pizzaMexQuantity * 28;
+                displayPrice(totalPrice);
+                if(totalPrice > 0 ) {
+                    sendOrderBtn.setVisibility(View.VISIBLE);
+                    sendOrderBtn.setEnabled(true);
+                }
             }
         });
 
         sendOrderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //sendEmail();
-                showAlert("Trebuie sa dai pe Order daca ai modificat comanda.");
+                showAlert("Ësti sigur ca vrei sa finalizezi comanda?");
             }
         });
     }
 
-    private void display(int number) {
-        quantityTextView.setText(String.valueOf(number));
-    }
 
     private void displayPrice(int number){
         priceTextView.setText(NumberFormat.getCurrencyInstance(new Locale("ro_RO", "RO")).format(number));
@@ -114,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Comanda mea");
         emailIntent.putExtra(Intent.EXTRA_TEXT,
-                "Doresc sa comand " + quantity + " cafele." +
+                "Doresc sa comand " + totalPrice + " cafele." +
                         "\nTotal de plata: " + priceTextView.getText());
         startActivity(Intent.createChooser(emailIntent, "Alege ce vrei sa folosesti"));
     }
@@ -129,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
+                        sendEmail();
                     }
                 });
 
