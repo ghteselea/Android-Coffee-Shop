@@ -18,6 +18,10 @@ public class OrderEntity {
         return id;
     }
 
+    public void setId(@NonNull Long id) {
+        this.id = id;
+    }
+
     public String getFoodName() {
         return foodName;
     }

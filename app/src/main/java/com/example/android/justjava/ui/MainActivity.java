@@ -3,6 +3,7 @@ package com.example.android.justjava.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 
 import com.example.android.justjava.R;
 import com.example.android.justjava.adapters.RecyclerViewAdapter;
+import com.example.android.justjava.database.AppDatabase;
+import com.example.android.justjava.database.dao.OrderDAO;
 
 import java.util.ArrayList;
 
@@ -40,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
+    AppDatabase database;
+    OrderDAO orderDAO;
+
 //    Lifecycle Methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         setup();
         addListeners();
         initAdapter();
+
     }
 
 //    Custom methods
@@ -56,6 +63,13 @@ public class MainActivity extends AppCompatActivity {
         totalTextView = findViewById(R.id.price_value);
         submitOrderBtn = findViewById(R.id.submitBtn);
         sendOrderBtn= findViewById(R.id.sendEmailBtn);
+    }
+
+    void initializeDatabase() {
+        database = Room.databaseBuilder(this, AppDatabase.class, "mydb")
+                .allowMainThreadQueries()
+                .build();
+        orderDAO = database.getOrderDAO();
     }
 
     private void addListeners() {
