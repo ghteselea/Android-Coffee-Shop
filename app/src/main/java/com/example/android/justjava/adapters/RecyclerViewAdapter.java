@@ -1,4 +1,4 @@
-package com.example.android.justjava;
+package com.example.android.justjava.adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.android.justjava.R;
 
 
 import java.util.ArrayList;
