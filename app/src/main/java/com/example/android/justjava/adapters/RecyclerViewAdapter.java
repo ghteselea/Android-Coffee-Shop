@@ -74,8 +74,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
                 Integer currentValueAtPosition = mQuantities.get(position);
-                mQuantities.set(position, --currentValueAtPosition);
-                notifyItemChanged(position);
+                if (currentValueAtPosition > 0) {
+                    mQuantities.set(position, --currentValueAtPosition);
+                    notifyItemChanged(position);
+                }
             }
         });
 

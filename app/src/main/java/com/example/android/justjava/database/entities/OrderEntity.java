@@ -12,6 +12,7 @@ public class OrderEntity {
     private String foodName;
     private int quantity;
     private int price;
+    private int imageId;
 
     @NonNull
     public Long getId() {
@@ -44,5 +45,13 @@ public class OrderEntity {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
     }
 }
