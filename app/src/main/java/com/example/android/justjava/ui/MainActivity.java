@@ -20,8 +20,10 @@ import com.example.android.justjava.R;
 import com.example.android.justjava.adapters.RecyclerViewAdapter;
 import com.example.android.justjava.database.AppDatabase;
 import com.example.android.justjava.database.dao.OrderDAO;
+import com.example.android.justjava.database.entities.OrderEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,10 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private int totalPrice = 0;
     private String finalText = "";
 
-    private ArrayList<String> mNames = new ArrayList<>();
-    private ArrayList<Integer> mImageUrls = new ArrayList<>();
-    private ArrayList<Integer> mQuantities = new ArrayList<>();
-    private ArrayList<Integer> mPrices = new ArrayList<>();
+    private List<OrderEntity> orderEntityList;
 
     RecyclerViewAdapter adapter;
     RecyclerView recyclerView;
@@ -54,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
         setup();
         addListeners();
+        initializeDatabase();
         initAdapter();
-
     }
 
 //    Custom methods
@@ -152,56 +151,47 @@ public class MainActivity extends AppCompatActivity {
                 "\nTotal de plata: " + totalPrice;
     }
 
+    private void addOrderToDatabase(String foodName, int quantity, int price, int imageId) {
+        OrderEntity product = new OrderEntity(foodName, quantity, price, imageId);
+        orderDAO.insert(product);
+    }
+
+    private void repopulateDatabase() {
+        orderDAO.deleteAll();
+        addOrderToDatabase("Pizza Capriciosa", 0, 25, R.drawable.capriciosa);
+        addOrderToDatabase("Pizza Morgana", 0, 25, R.drawable.morgana);
+        addOrderToDatabase("Pizza De la Baicoi", 0, 25, R.drawable.de_la_baicoi);
+        addOrderToDatabase("Pizza Hawaiana", 0, 25, R.drawable.hawaiana);
+        addOrderToDatabase("Pizza Quatro Scarbosenii", 0, 25, R.drawable.quattro_scarbosenii);
+        addOrderToDatabase("Pizza Vegetariana", 0, 25, R.drawable.vegetariana);
+        addOrderToDatabase("Pizza Capriciosa", 0, 25, R.drawable.capriciosa);
+        addOrderToDatabase("Pizza Morgana", 0, 25, R.drawable.morgana);
+        addOrderToDatabase("Pizza De la Baicoi", 0, 25, R.drawable.de_la_baicoi);
+        addOrderToDatabase("Pizza Hawaiana", 0, 25, R.drawable.hawaiana);
+        addOrderToDatabase("Pizza Quatro Scarbosenii", 0, 25, R.drawable.quattro_scarbosenii);
+        addOrderToDatabase("Pizza Vegetariana", 0, 25, R.drawable.vegetariana);
+        addOrderToDatabase("Pizza Capriciosa", 0, 25, R.drawable.capriciosa);
+        addOrderToDatabase("Pizza Morgana", 0, 25, R.drawable.morgana);
+        addOrderToDatabase("Pizza De la Baicoi", 0, 25, R.drawable.de_la_baicoi);
+        addOrderToDatabase("Pizza Hawaiana", 0, 25, R.drawable.hawaiana);
+        addOrderToDatabase("Pizza Quatro Scarbosenii", 0, 25, R.drawable.quattro_scarbosenii);
+        addOrderToDatabase("Pizza Vegetariana", 0, 25, R.drawable.vegetariana);
+    }
+
     private void initAdapter() {
         Log.d(TAG, "initAdapter: preparing bitmaps.");
-
-        mImageUrls.add(R.drawable.capriciosa);
-        mNames.add("Pizza Capriciosa");
-        mQuantities.add(0);
-        mPrices.add(25);
-
-        mImageUrls.add(R.drawable.morgana);
-        mNames.add("Pizza cu mucegai");
-        mQuantities.add(0);
-        mPrices.add(30);
-
-        mImageUrls.add(R.drawable.vegetariana);
-        mNames.add("Pizza da vegani");
-        mQuantities.add(0);
-        mPrices.add(20);
-
-        mImageUrls.add(R.drawable.capriciosa);
-        mNames.add("Pizza cu \'d\' in loc de al doilea \'z\'");
-        mQuantities.add(0);
-        mPrices.add(24);
-
-        mImageUrls.add(R.drawable.capriciosa);
-        mNames.add("Pizza Capriciosa");
-        mQuantities.add(0);
-        mPrices.add(25);
-
-        mImageUrls.add(R.drawable.morgana);
-        mNames.add("Pizza cu mucegai");
-        mQuantities.add(0);
-        mPrices.add(30);
-
-        mImageUrls.add(R.drawable.vegetariana);
-        mNames.add("Pizza da vegani");
-        mQuantities.add(0);
-        mPrices.add(20);
-
-        mImageUrls.add(R.drawable.capriciosa);
-        mNames.add("Pizza cu \'d\' in loc de al doilea \'z\'");
-        mQuantities.add(0);
-        mPrices.add(24);
-
+        //repopulateDatabase();
         initRecyclerView();
     }
 
     private void initRecyclerView() {
         Log.d(TAG, "initRecyclerVIew: init RecyclerViwe");
         recyclerView = findViewById(R.id.recycler_view);
-        adapter = new RecyclerViewAdapter(mNames, mImageUrls, mQuantities, mPrices, MainActivity.this);
+        //adapter = new RecyclerViewAdapter(mNames, mImageUrls, mQuantities, mPrices, MainActivity.this);
+
+        orderEntityList = orderDAO.getAllOrders();
+        adapter = new RecyclerViewAdapter(orderEntityList, MainActivity.this);
+
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

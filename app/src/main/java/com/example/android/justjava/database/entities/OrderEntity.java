@@ -8,11 +8,22 @@ import androidx.room.PrimaryKey;
 public class OrderEntity {
 
     @PrimaryKey
-    @NonNull private Long id;
+    private Long id;
     private String foodName;
     private int quantity;
     private int price;
     private int imageId;
+
+    public OrderEntity() {
+
+    }
+
+    public OrderEntity(String foodName, int quantity, int price, int image) {
+        this.foodName = foodName;
+        this.quantity = quantity;
+        this.price = price;
+        imageId = image;
+    }
 
     @NonNull
     public Long getId() {

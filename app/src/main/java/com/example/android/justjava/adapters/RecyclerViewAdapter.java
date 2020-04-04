@@ -13,30 +13,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.justjava.R;
+import com.example.android.justjava.database.entities.OrderEntity;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "RecyclerViewAdapter";
-    private ArrayList<String> mImageNames = new ArrayList<>();
-    private ArrayList<Integer> mImages = new ArrayList<>();
-    private ArrayList<Integer> mQuantities = new ArrayList<>();
-    private ArrayList<Integer> mPrices = new ArrayList<>();
+    private List<OrderEntity> orderEntityList;
+
     private Context mContext;
 
-    public RecyclerViewAdapter(ArrayList<String> mImageNames,
-                               ArrayList<Integer> mImages,
-                               ArrayList<Integer> mQuantities,
-                               ArrayList<Integer> mPrices,
-                               Context mContext) {
-        this.mImageNames = mImageNames;
-        this.mImages = mImages;
-        this.mQuantities = mQuantities;
-        this.mPrices = mPrices;
+    public RecyclerViewAdapter(List<OrderEntity> orderEntities, Context mContext) {
+        orderEntityList = orderEntities;
         this.mContext = mContext;
     }
 
@@ -54,18 +47,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         Glide.with(mContext)
                 .asBitmap()
-                .load(mImages.get(position))
+                //.load(mImages.get(position))
+                .load(orderEntityList.get(position).getImageId())
                 .into(holder.image);
 
-        holder.pizzaName.setText(mImageNames.get(position));
-        holder.pizzaQuantity.setText(mQuantities.get(position).toString());
-        holder.pizzPrice.setText(mPrices.get(position).toString());
+        holder.pizzaName.setText(orderEntityList.get(position).getFoodName());
+        holder.pizzaQuantity.setText(String.valueOf(orderEntityList.get(position).getQuantity()));
+        holder.pizzPrice.setText(String.valueOf(orderEntityList.get(position).getPrice()));
 
         holder.plusPizzaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer currentValueAtPosition = mQuantities.get(position);
-                mQuantities.set(position, ++currentValueAtPosition);
+                OrderEntity currentEntity = orderEntityList.get(position);
+                int currentValueAtPosition = currentEntity.getQuantity();
+                currentEntity.setQuantity(++currentValueAtPosition);
                 notifyItemChanged(position);
             }
         });
@@ -73,9 +68,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.minusPizzaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer currentValueAtPosition = mQuantities.get(position);
+                OrderEntity currentEntity = orderEntityList.get(position);
+                int currentValueAtPosition = currentEntity.getQuantity();
+
                 if (currentValueAtPosition > 0) {
-                    mQuantities.set(position, --currentValueAtPosition);
+                    currentEntity.setQuantity(--currentValueAtPosition);
                     notifyItemChanged(position);
                 }
             }
@@ -85,7 +82,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return mImageNames.size();
+        return orderEntityList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
