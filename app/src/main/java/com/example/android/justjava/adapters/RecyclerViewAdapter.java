@@ -10,9 +10,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.bumptech.glide.Glide;
 import com.example.android.justjava.R;
+import com.example.android.justjava.database.AppDatabase;
+import com.example.android.justjava.database.dao.OrderDAO;
 import com.example.android.justjava.database.entities.OrderEntity;
 
 
@@ -27,10 +30,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<OrderEntity> orderEntityList;
 
     private Context mContext;
+    AppDatabase database;
+    OrderDAO orderDAO;
 
     public RecyclerViewAdapter(List<OrderEntity> orderEntities, Context mContext) {
         orderEntityList = orderEntities;
         this.mContext = mContext;
+        database = Room.databaseBuilder(mContext, AppDatabase.class, "mydb")
+                .allowMainThreadQueries()
+                .build();
+        orderDAO = database.getOrderDAO();
     }
 
     @NonNull
@@ -61,6 +70,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 OrderEntity currentEntity = orderEntityList.get(position);
                 int currentValueAtPosition = currentEntity.getQuantity();
                 currentEntity.setQuantity(++currentValueAtPosition);
+                orderDAO.update(currentEntity);
                 notifyItemChanged(position);
             }
         });
@@ -73,6 +83,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 if (currentValueAtPosition > 0) {
                     currentEntity.setQuantity(--currentValueAtPosition);
+                    orderDAO.update(currentEntity);
                     notifyItemChanged(position);
                 }
             }
