@@ -76,7 +76,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                createFinalString();
+                List<OrderEntity> orderEntities = orderDAO.getAllOrders();
+
+                finalText = "";
+                totalPrice = 0;
+
+                for (int i = 0; i <= orderEntities.size()-1; i++) {
+
+                    OrderEntity currentOrder = orderEntities.get(i);
+
+                    if(currentOrder.getQuantity() > 0) {
+                        finalText = finalText + currentOrder.getFoodName() + ": "
+                                + String.valueOf(currentOrder.getQuantity()) + " - Pret: "
+                                + String.valueOf(currentOrder.getQuantity() * currentOrder.getPrice()) + " Ron" + "\n";
+
+                        totalPrice = totalPrice + currentOrder.getQuantity() * currentOrder.getPrice();
+                    }
+
+                }
+
+                finalText = finalText + "\n " + String.valueOf(totalPrice) + " Ron.";
                 totalTextView.setText(finalText);
 
                 if(totalPrice > 0 ) {
@@ -98,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
 
         String email = "gteselea@yahoo.com";
 
-        createFinalString();
 
         Intent emailIntent = new Intent(
                 Intent.ACTION_SENDTO,
@@ -134,21 +152,6 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = alert.create();
         alertDialog.show();
-    }
-
-    void createFinalString() {
-//        totalPrice = pizzaCasQuantity * 25 + pizzaMexQuantity * 28 + pizzaCapQuantity * 30;
-//
-//        finalText = "Comanda: ";
-//        finalText = pizzaCasQuantity == 0 ? finalText : finalText + "\n- " + pizzaCasQuantity + " pizza Casei";
-//        finalText = pizzaMexQuantity == 0 ? finalText : finalText + "\n- " + pizzaMexQuantity + " pizza Mexicana ";
-//        finalText = pizzaCapQuantity == 0 ? finalText : finalText + "\n- " + pizzaCapQuantity + " pizza Capriciosa";
-        //if (pizzaCapQuantity > 0) {
-        //   finalText = finalText + "\n- " + pizzaCapQuantity + " pizza Capriciosa";
-        //}
-
-        finalText = finalText +
-                "\nTotal de plata: " + totalPrice;
     }
 
     private void addOrderToDatabase(String foodName, int quantity, int price, int imageId) {

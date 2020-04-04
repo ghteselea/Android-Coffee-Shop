@@ -29,7 +29,7 @@
     <TextView
         android:id="@+id/price_text_view"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="TOTAL:"
         android:textColor="@android:color/black"
