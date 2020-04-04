@@ -76,27 +76,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                List<OrderEntity> orderEntities = orderDAO.getAllOrders();
-
-                finalText = "";
-                totalPrice = 0;
-
-                for (int i = 0; i <= orderEntities.size()-1; i++) {
-
-                    OrderEntity currentOrder = orderEntities.get(i);
-
-                    if(currentOrder.getQuantity() > 0) {
-                        finalText = finalText + currentOrder.getFoodName() + ": "
-                                + String.valueOf(currentOrder.getQuantity()) + " - Pret: "
-                                + String.valueOf(currentOrder.getQuantity() * currentOrder.getPrice()) + " Ron" + "\n";
-
-                        totalPrice = totalPrice + currentOrder.getQuantity() * currentOrder.getPrice();
-                    }
-
-                }
-
-                finalText = finalText + "\n " + String.valueOf(totalPrice) + " Ron.";
-                totalTextView.setText(finalText);
+                createBill();
 
                 if(totalPrice > 0 ) {
                     sendOrderBtn.setVisibility(View.VISIBLE);
@@ -108,9 +88,35 @@ public class MainActivity extends AppCompatActivity {
         sendOrderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                createBill();
                 showAlert("Esti sigur ca vrei sa finalizezi comanda?");
             }
         });
+    }
+
+    private void createBill() {
+        finalText = "";
+        totalPrice = 0;
+
+        List<OrderEntity> orderEntities = orderDAO.getAllOrders();
+
+        for (int i = 0; i <= orderEntities.size()-1; i++) {
+
+            OrderEntity currentOrder = orderEntities.get(i);
+
+            if(currentOrder.getQuantity() > 0) {
+                finalText = finalText + String.valueOf(currentOrder.getQuantity()) + " x " +
+                        currentOrder.getFoodName() + ": " + " - Pret: " +
+                        String.valueOf(currentOrder.getQuantity() * currentOrder.getPrice()) +
+                        " Ron" + "\n";
+
+                totalPrice = totalPrice + currentOrder.getQuantity() * currentOrder.getPrice();
+            }
+
+        }
+
+        finalText = finalText + "\n " + String.valueOf(totalPrice) + " Ron.";
+        totalTextView.setText(finalText);
     }
 
     private void sendEmail() {
@@ -125,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Comanda mea");
         emailIntent.putExtra(Intent.EXTRA_TEXT, finalText);
         startActivity(Intent.createChooser(emailIntent, "Alege ce vrei sa folosesti"));
+
     }
 
     private void showAlert(String title) {
