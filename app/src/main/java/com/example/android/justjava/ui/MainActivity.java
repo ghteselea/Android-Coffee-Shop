@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         emailIntent.putExtra(Intent.EXTRA_TEXT, finalText);
         startActivity(Intent.createChooser(emailIntent, "Alege ce vrei sa folosesti"));
 
+
     }
 
     private void showAlert(String title) {
@@ -145,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                         sendEmail();
+                        repopulateDatabase();
+                        recreate();
                     }
                 });
 
@@ -168,18 +171,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void repopulateDatabase() {
         orderDAO.deleteAll();
-        addOrderToDatabase("Pizza Capriciosa", 0, 25, R.drawable.capriciosa);
-        addOrderToDatabase("Pizza Morgana", 0, 25, R.drawable.morgana);
-        addOrderToDatabase("Pizza De la Baicoi", 0, 25, R.drawable.de_la_baicoi);
-        addOrderToDatabase("Pizza Hawaiana", 0, 25, R.drawable.hawaiana);
-        addOrderToDatabase("Pizza Quatro Scarbosenii", 0, 25, R.drawable.quattro_scarbosenii);
-        addOrderToDatabase("Pizza Vegetariana", 0, 25, R.drawable.vegetariana);
-        addOrderToDatabase("Pizza Capriciosa", 0, 25, R.drawable.capriciosa);
-        addOrderToDatabase("Pizza Morgana", 0, 25, R.drawable.morgana);
-        addOrderToDatabase("Pizza De la Baicoi", 0, 25, R.drawable.de_la_baicoi);
-        addOrderToDatabase("Pizza Hawaiana", 0, 25, R.drawable.hawaiana);
-        addOrderToDatabase("Pizza Quatro Scarbosenii", 0, 25, R.drawable.quattro_scarbosenii);
-        addOrderToDatabase("Pizza Vegetariana", 0, 25, R.drawable.vegetariana);
         addOrderToDatabase("Pizza Capriciosa", 0, 25, R.drawable.capriciosa);
         addOrderToDatabase("Pizza Morgana", 0, 25, R.drawable.morgana);
         addOrderToDatabase("Pizza De la Baicoi", 0, 25, R.drawable.de_la_baicoi);
