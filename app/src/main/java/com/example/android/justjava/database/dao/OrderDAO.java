@@ -19,6 +19,12 @@ public interface OrderDAO {
     @Query("SELECT * FROM orders WHERE id = :id")
     public OrderEntity getOrderById (Long id);
 
+    @Query("SELECT * FROM orders WHERE type = :foodType ")
+    public List<OrderEntity> getAllOrdersWithType(String foodType);
+
+    @Query("SELECT * FROM orders WHERE quantity > 0")
+    public List<OrderEntity> getFinalOrder();
+
     @Insert
     public void insert(OrderEntity... userEntities);
 

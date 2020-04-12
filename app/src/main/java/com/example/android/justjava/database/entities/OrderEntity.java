@@ -1,6 +1,7 @@
 package com.example.android.justjava.database.entities;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -10,6 +11,7 @@ public class OrderEntity {
     @PrimaryKey
     private Long id;
     private String foodName;
+    @ColumnInfo(name = "type") private String foodType; // food_type by default
     private int quantity;
     private int price;
     private int imageId;
@@ -18,8 +20,9 @@ public class OrderEntity {
 
     }
 
-    public OrderEntity(String foodName, int quantity, int price, int image) {
+    public OrderEntity(String foodName, String foodType, int quantity, int price, int image) {
         this.foodName = foodName;
+        this.foodType = foodType;
         this.quantity = quantity;
         this.price = price;
         imageId = image;
@@ -40,6 +43,14 @@ public class OrderEntity {
 
     public void setFoodName(String foodName) {
         this.foodName = foodName;
+    }
+
+    public String getFoodType() {
+        return foodType;
+    }
+
+    public void setFoodType(String foodType) {
+        this.foodType = foodType;
     }
 
     public int getQuantity() {
